@@ -26,6 +26,7 @@
 #include "Globals/ObjectMgr.h"
 #include "AI/ScriptDevAI/ScriptDevAIMgr.h"
 #include "Entities/Player.h"
+#include "DualSpec/DualSpecMgr.h"
 #include "Entities/GossipDef.h"
 #include "DBScripts/ScriptMgr.h"
 #include "Entities/Creature.h"
@@ -326,6 +327,9 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket& recv_data)
     if (pCreature->isSpiritGuide())
         pCreature->SendAreaSpiritHealerQueryOpcode(_player);
 
+    if (sDualSpecMgr.OnPreGossipHello(_player, pCreature))
+        return;
+
     if (!sScriptDevAIMgr.OnGossipHello(_player, pCreature))
     {
         _player->PrepareGossipMenu(pCreature, pCreature->GetDefaultGossipMenuId());
@@ -363,6 +367,11 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
             return;
         }
 
+        if (sDualSpecMgr.OnGossipSelect(_player, pCreature, sender, action, code, gossipListId))
+        {
+            return;
+        }
+
         if (!sScriptDevAIMgr.OnGossipSelect(_player, pCreature, sender, action, code.empty() ? nullptr : code.c_str()))
             _player->OnGossipSelect(pCreature, gossipListId, menuId);
     }
@@ -378,6 +387,29 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
 
         if (!sScriptDevAIMgr.OnGossipSelect(_player, pGo, sender, action, code.empty() ? nullptr : code.c_str()))
             _player->OnGossipSelect(pGo, gossipListId, menuId);
+    }
+    else if (guid.IsItem())
+    {
+        Item* pItem = _player->GetItemByGuid(guid);
+
+        if (!pItem)
+        {
+            DEBUG_LOG(
+                "WORLD: HandleGossipSelectOptionOpcode - Item %s not found.",
+                guid.GetString().c_str());
+            return;
+        }
+
+        if (sDualSpecMgr.OnGossipSelect(
+                _player,
+                pItem,
+                sender,
+                action,
+                code,
+                gossipListId))
+        {
+            return;
+        }
     }
 }
 

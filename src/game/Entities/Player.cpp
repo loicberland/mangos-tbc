@@ -17,6 +17,7 @@
  */
 
 #include "Entities/Player.h"
+#include "DualSpec/DualSpecMgr.h"
 #include "Tools/Language.h"
 #include "Database/DatabaseEnv.h"
 #include "Log/Log.h"
@@ -713,6 +714,8 @@ Player::~Player()
 #endif
 
     delete m_declinedname;
+
+    sDualSpecMgr.OnLogOut(this);
 }
 
 void Player::CleanupsBeforeDelete()
@@ -973,6 +976,8 @@ bool Player::Create(uint32 guidlow, const std::string& name, uint8 race, uint8 c
         }
     }
     // all item positions resolved
+
+    sDualSpecMgr.OnCharacterCreated(this);
 
     return true;
 }
@@ -3975,6 +3980,8 @@ bool Player::resetTalents(bool no_cost)
         m_resetTalentsCost = cost;
         m_resetTalentsTime = time(nullptr);
     }
+    
+    sDualSpecMgr.OnResetTalents(this, cost);
 
     // FIXME: remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
     RemovePet(PET_SAVE_REAGENTS);
@@ -4398,6 +4405,9 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
             CharacterDatabase.PExecute("DELETE FROM guild_eventlog WHERE PlayerGuid1 = '%u' OR PlayerGuid2 = '%u'", lowguid, lowguid);
             CharacterDatabase.PExecute("DELETE FROM guild_bank_eventlog WHERE PlayerGuid = '%u'", lowguid);
             CharacterDatabase.CommitTransaction();
+
+            sDualSpecMgr.OnDeleteFromDB(lowguid);
+
             break;
         }
         // The character gets unlinked from the account, the name gets freed up and appears as deleted ingame
@@ -15079,6 +15089,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
         return false;
     }
 
+    sDualSpecMgr.OnPreLoadFromDB(guid.GetCounter());
+
     // overwrite possible wrong/corrupted guid
     SetGuidValue(OBJECT_FIELD_GUID, guid);
 
@@ -15663,11 +15675,16 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder* holder)
 
     _LoadCreatedInstanceTimers();
 
+    sDualSpecMgr.OnLoadFromDB(this);
+
     return true;
 }
 
 void Player::_LoadActions(std::unique_ptr<QueryResult> queryResult)
 {
+    if (sDualSpecMgr.OnLoadActionButtons(this, m_actionButtons))
+        return;
+
     m_actionButtons.clear();
 
     // QueryResult *result = CharacterDatabase.PQuery("SELECT button,action,type FROM character_action WHERE guid = '%u' ORDER BY button",GetGUIDLow());
@@ -16918,6 +16935,8 @@ void Player::SaveToDB()
     // save pet (hunter pet level and experience and all type pets health/mana except priest pet).
     if (Pet* pet = GetPet())
         pet->SavePetToDB(PET_SAVE_AS_CURRENT, this);
+
+    sDualSpecMgr.OnSaveToDB(this);
 }
 
 // fast save function for item/money cheating preventing - save only inventory and money state
@@ -16937,6 +16956,9 @@ void Player::SaveGoldToDB() const
 
 void Player::_SaveActions()
 {
+    if (sDualSpecMgr.OnSaveActionButtons(this, m_actionButtons))
+        return;
+
     static SqlStatementID insertAction ;
     static SqlStatementID updateAction ;
     static SqlStatementID deleteAction ;
@@ -21587,6 +21609,8 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
     // learn! (other talent ranks will unlearned at learning)
     learnSpell(spellid, false, true);
     DETAIL_LOG("TalentID: %u Rank: %u Spell: %u\n", talentId, talentRank, spellid);
+
+    sDualSpecMgr.OnLearnTalent(this, spellid);
 }
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)

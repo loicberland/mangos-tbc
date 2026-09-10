@@ -17,6 +17,7 @@
  */
 
 #include "Common.h"
+#include "DualSpec/DualSpecMgr.h"
 #include "Server/DBCStores.h"
 #include "Server/WorldPacket.h"
 #include "Server/WorldSession.h"
@@ -161,6 +162,9 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
             Spell::SendCastResult(_player, spellInfo, cast_count, SPELL_FAILED_BAD_TARGETS);
         return;
     }
+
+    if (sDualSpecMgr.OnUseItem(pUser, pItem))
+        return;
 
     // Note: If script stop casting it must send appropriate data to client to prevent stuck item in gray state.
     if (!sScriptDevAIMgr.OnItemUse(pUser, pItem, targets))
