@@ -21,6 +21,7 @@
 */
 
 #include "World/World.h"
+#include "DualSpec/DualSpecMgr.h"
 #include "Database/DatabaseEnv.h"
 #include "Config/Config.h"
 #include "Platform/Define.h"
@@ -878,6 +879,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_BOOL_REGEN_ZONE_AREA_ON_STARTUP, "Spawns.ZoneArea", false);
 
+    setConfig(CONFIG_BOOL_DUAL_SPEC_ENABLED, "Dualspec.Enable", true);
+    setConfig(CONFIG_UINT32_DUAL_SPEC_COST, "Dualspec.Cost", 500000);
     sLog.outString();
 }
 
@@ -1501,6 +1504,8 @@ void World::SetInitialWorldSettings()
     auctionbot.Init();
 #endif
 #endif
+
+    sDualSpecMgr.Initialize();
 
     sLog.outString("---------------------------------------");
     sLog.outString("      CMANGOS: World initialized       ");
