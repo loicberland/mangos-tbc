@@ -5267,6 +5267,14 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder* holder)
 
         if (!existingSpellProto)
             continue;
+        
+        // Allow several resource tracking auras at the same time. 
+        // Examples: Find Herbs and Find Minerals. 
+        if (IsSpellHaveAura(spellProto, SPELL_AURA_TRACK_RESOURCES) &&
+            IsSpellHaveAura(existingSpellProto, SPELL_AURA_TRACK_RESOURCES))
+        {
+            continue;
+        }
 
         const uint32 existingSpellId = existingSpellProto->Id;
         SpellGroupSpellData const* existingData = sSpellStacker.GetSpellGroupDataForSpell(existingSpellId);
