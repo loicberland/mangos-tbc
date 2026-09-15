@@ -2354,8 +2354,9 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, bool targ
             }
 
             uint32 fishingSkill = m_caster->IsPlayer() ? static_cast<Player*>(m_caster)->GetSkillValue(SKILL_FISHING) : 0;
-            if (fishingSkill < minimumRequiredSkill)
-                result = SPELL_FAILED_LOW_CASTLEVEL;
+            // Disable zone fishing skill requirement
+            // if (fishingSkill < minimumRequiredSkill)
+            //     result = SPELL_FAILED_LOW_CASTLEVEL;
 
             if (result != SPELL_CAST_OK)
             {

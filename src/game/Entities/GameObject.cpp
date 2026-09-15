@@ -1791,12 +1791,17 @@ void GameObject::Use(Unit* user, SpellEntry const* spellInfo)
 
                     int32 skill = player->GetSkillValue(SKILL_FISHING);
                     int32 chance = skill - zone_skill + 5;
+
+                    if (chance < 5)
+                        chance = 5;
+
                     int32 roll = irand(1, 100);
 
                     DEBUG_LOG("Fishing check (skill: %i zone min skill: %i chance %i roll: %i", skill, zone_skill, chance, roll);
 
                     // normal chance
-                    bool success = skill >= zone_skill && chance >= roll;
+                    // bool success = skill >= zone_skill && chance >= roll;
+                    bool success = chance >= roll;
                     GameObject* fishingHole = nullptr;
 
                     // overwrite fail in case fishhole if allowed (after 3.3.0)
