@@ -117,7 +117,7 @@ void DualSpecMgr::Initialize()
                     specNameString << "|r";
 
                     const std::string msg = player->GetSession()->GetMangosString(DUAL_SPEC_ARE_YOU_SURE_SWITCH);
-                    player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (1 + spec), msg, false);
+                    player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (1 + spec), msg, 0, false);
                 }
 
                 for (uint8 spec = 0; spec < specCount; ++spec)
@@ -130,7 +130,7 @@ void DualSpecMgr::Initialize()
                     specNameString << (spec == activeSpec ? player->GetSession()->GetMangosString(DUAL_SPEC_ACTIVE) : "");
                     specNameString << "|r";
 
-                    player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (10 + spec), "", true);
+                    player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_BATTLE, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (10 + spec), "", 0, true);
                 }
 
                 player->GetPlayerMenu()->SendGossipMenu(DUALSPEC_ITEM_TEXT, item->GetObjectGuid());
@@ -304,7 +304,7 @@ void DualSpecMgr::Initialize()
                             specNameString << player->GetSession()->GetMangosString(DUAL_SPEC_RENAME);
                             specNameString << (specName.empty() ? player->GetSession()->GetMangosString(DUAL_SPEC_UNNAMED) : specName);
                             specNameString << (spec == activeSpec ? player->GetSession()->GetMangosString(DUAL_SPEC_ACTIVE) : "");
-                            player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_TALK, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (10 + spec), "", true);
+                            player->GetPlayerMenu()->GetGossipMenu().AddMenuItem(GOSSIP_ICON_TALK, specNameString.str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + (10 + spec), "", 0, true);
                         }
 
                         player->GetPlayerMenu()->SendGossipMenu(DUALSPEC_NPC_TEXT, creature->GetObjectGuid());
