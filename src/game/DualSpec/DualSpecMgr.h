@@ -10,7 +10,7 @@ class Creature;
 class Item;
 
 #define MAX_TALENT_RANK 5
-#define MAX_TALENT_SPECS 2
+#define MAX_TALENT_SPECS 4
 
 #define DUALSPEC_NPC_ENTRY 100601
 #define DUALSPEC_ITEM_ENTRY 17731
