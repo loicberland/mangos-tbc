@@ -91,7 +91,7 @@ void DualSpecMgr::Initialize()
                 }
 
                 const uint8 specCount = GetPlayerSpecCount(playerId);
-                if (specCount < MAX_TALENT_SPECS)
+                if (specCount < 2)
                 {
                     const std::string msg = player->GetSession()->GetMangosString(DUAL_SPEC_ERR_UNLOCK);
                     player->GetSession()->SendNotification(msg.c_str());
@@ -222,6 +222,14 @@ void DualSpecMgr::Initialize()
                     {
                         SetPlayerSpecName(player, 1, strCode);
                     }
+                    else if (action == GOSSIP_ACTION_INFO_DEF + 12)
+                    {
+                        SetPlayerSpecName(player, 2, strCode);
+                    }
+                    else if (action == GOSSIP_ACTION_INFO_DEF + 13)
+                    {
+                        SetPlayerSpecName(player, 3, strCode);
+                    }
 
                     player->GetPlayerMenu()->CloseGossip();
                 }
@@ -276,6 +284,38 @@ void DualSpecMgr::Initialize()
                         else
                         {
                             ActivatePlayerSpec(player, 1);
+                        }
+
+                        break;
+                    }
+
+                    case GOSSIP_ACTION_INFO_DEF + 3:
+                    {
+                        if (GetPlayerActiveSpec(playerId) == 2)
+                        {
+                            player->GetPlayerMenu()->CloseGossip();
+                            player->GetSession()->SendNotification(player->GetSession()->GetMangosString(DUAL_SPEC_ALREADY_ON_SPEC));
+                            OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5, "", gossipListId);
+                        }
+                        else
+                        {
+                            ActivatePlayerSpec(player, 2);
+                        }
+
+                        break;
+                    }
+
+                    case GOSSIP_ACTION_INFO_DEF + 4:
+                    {
+                        if (GetPlayerActiveSpec(playerId) == 3)
+                        {
+                            player->GetPlayerMenu()->CloseGossip();
+                            player->GetSession()->SendNotification(player->GetSession()->GetMangosString(DUAL_SPEC_ALREADY_ON_SPEC));
+                            OnGossipSelect(player, creature, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5, "", gossipListId);
+                        }
+                        else
+                        {
+                            ActivatePlayerSpec(player, 3);
                         }
 
                         break;
@@ -350,6 +390,14 @@ void DualSpecMgr::Initialize()
                     {
                         SetPlayerSpecName(player, 1, strCode);
                     }
+                    else if (action == GOSSIP_ACTION_INFO_DEF + 12)
+                    {
+                        SetPlayerSpecName(player, 2, strCode);
+                    }
+                    else if (action == GOSSIP_ACTION_INFO_DEF + 13)
+                    {
+                        SetPlayerSpecName(player, 3, strCode);
+                    }
 
                     player->GetPlayerMenu()->CloseGossip();
                 }
@@ -386,6 +434,38 @@ void DualSpecMgr::Initialize()
                                 ActivatePlayerSpec(player, 1);
                             }
                         
+                            break;
+                        }
+
+                        case GOSSIP_ACTION_INFO_DEF + 3:
+                        {
+                            if (GetPlayerActiveSpec(playerId) == 2)
+                            {
+                                player->GetPlayerMenu()->CloseGossip();
+                                const std::string msg = player->GetSession()->GetMangosString(DUAL_SPEC_ALREADY_ON_SPEC);
+                                player->GetSession()->SendNotification(msg.c_str());
+                            }
+                            else
+                            {
+                                ActivatePlayerSpec(player, 2);
+                            }
+
+                            break;
+                        }
+
+                        case GOSSIP_ACTION_INFO_DEF + 4:
+                        {
+                            if (GetPlayerActiveSpec(playerId) == 3)
+                            {
+                                player->GetPlayerMenu()->CloseGossip();
+                                const std::string msg = player->GetSession()->GetMangosString(DUAL_SPEC_ALREADY_ON_SPEC);
+                                player->GetSession()->SendNotification(msg.c_str());
+                            }
+                            else
+                            {
+                                ActivatePlayerSpec(player, 3);
+                            }
+
                             break;
                         }
 
@@ -1077,7 +1157,7 @@ void DualSpecMgr::Initialize()
             if (GetPlayerActiveSpec(playerId) == spec)
                 return;
 
-            if (spec > GetPlayerSpecCount(playerId))
+            if (spec >= GetPlayerSpecCount(playerId))
                 return;
 
             if (player->IsNonMeleeSpellCasted(false))
