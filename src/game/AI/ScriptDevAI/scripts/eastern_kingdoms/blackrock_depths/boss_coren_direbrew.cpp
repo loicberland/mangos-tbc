@@ -117,21 +117,21 @@ struct boss_coren_direbrewAI : public CombatAI
         m_guids.push_back(summoned->GetObjectGuid());
     }
 
-    void SummonedCreatureDespawn(Creature* summoned) override
-    {
-        if (!m_creature->IsAlive() || !m_creature->IsInCombat())
-            return;
+    // void SummonedCreatureDespawn(Creature* summoned) override
+    // {
+    //     if (!m_creature->IsAlive() || !m_creature->IsInCombat())
+    //         return;
 
-        switch (summoned->GetEntry())
-        {
-            case NPC_ILSA_DIREBREW:
-                SetActionReadyStatus(COREN_SPAWN_ILSA, true);
-                break;
-            case NPC_URSULA_DIREBREW:
-                SetActionReadyStatus(COREN_SPAWN_ILSA, true);
-                break;
-        }
-    }
+    //     switch (summoned->GetEntry())
+    //     {
+    //         case NPC_ILSA_DIREBREW:
+    //             SetActionReadyStatus(COREN_SPAWN_ILSA, true);
+    //             break;
+    //         case NPC_URSULA_DIREBREW:
+    //             SetActionReadyStatus(COREN_SPAWN_ILSA, true);
+    //             break;
+    //     }
+    // }
 
     void JustSummoned(GameObject* go) override
     {
