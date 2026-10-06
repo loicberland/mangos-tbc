@@ -1,5 +1,5 @@
 #include "BoostConfig.h"
-#include "Config/sConfig.h"
+#include "Config/Config.h"
 
 namespace boost_native
 {
