@@ -1,4 +1,4 @@
-#include "BoostsConfig.h"
+#include "BoostConfig.h"
 #include "Config/sConfig.h"
 
 namespace boost_native
