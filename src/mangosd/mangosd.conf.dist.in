@@ -1903,6 +1903,47 @@ CharDelete.KeepDays = 30
 Dualspec.Enable = 1
 Dualspec.Cost = 500000
 
+##################################################################
+# BOOST NATIF
+##################################################################
+
+Boost.Enable = 1
+
+Boost.MinLevelAlliance = 1
+Boost.MinLevelHorde = 1
+Boost.MinLevelNewRace = 1
+
+# Somme en cuivre : 1000000 = 100 po
+Boost.StarterGold = 1000000
+
+Boost.Boost58 = 1
+Boost.Boost60 = 1
+Boost.Boost70 = 1
+
+Boost.Level58 = 1
+Boost.Level60 = 1
+Boost.Level70 = 1
+
+Boost.Bags = 1
+Boost.FoodRegs = 1
+Boost.Pet = 1
+Boost.Ammo = 1
+
+Boost.ResetTalents = 1
+Boost.ResetInstances = 1
+Boost.UntrainPet = 1
+
+Boost.Mounts = 1
+Boost.Taxi = 1
+Boost.FirstAid = 1
+Boost.Spells = 1
+
+Boost.GearBlue58 = 1
+Boost.Level60Bis = 1
+Boost.Level70Bis = 1
+
+Boost.Teleports = 1
+
 ###################################################################################################################
 # METRICS CONFIGURATION -> Require core builded with BUILD_METRICS option
 #

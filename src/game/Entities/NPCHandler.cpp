@@ -34,6 +34,7 @@
 #include "Guilds/Guild.h"
 #include "Guilds/GuildMgr.h"
 #include "Chat/Chat.h"
+#include "Boost/BoostMgr.h"
 
 enum StableResultCode
 {
@@ -330,6 +331,9 @@ void WorldSession::HandleGossipHelloOpcode(WorldPacket& recv_data)
     if (sDualSpecMgr.OnPreGossipHello(_player, pCreature))
         return;
 
+    if (sBoostMgr.OnPreGossipHello(_player, pCreature))
+        return;
+
     if (!sScriptDevAIMgr.OnGossipHello(_player, pCreature))
     {
         _player->PrepareGossipMenu(pCreature, pCreature->GetDefaultGossipMenuId());
@@ -368,6 +372,11 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket& recv_data)
         }
 
         if (sDualSpecMgr.OnGossipSelect(_player, pCreature, sender, action, code, gossipListId))
+        {
+            return;
+        }
+
+        if (sBoostMgr.OnGossipSelect(_player, pCreature, sender, action, code, gossipListId))
         {
             return;
         }

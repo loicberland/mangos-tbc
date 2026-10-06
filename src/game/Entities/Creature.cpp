@@ -47,6 +47,7 @@
 #include "Movement/MoveSplineInit.h"
 #include "Entities/CreatureLinkingMgr.h"
 #include "Maps/SpawnManager.h"
+#include "Boost/BoostMgr.h"
 
 // apply implementation of the singletons
 #include "Policies/Singleton.h"
@@ -209,6 +210,8 @@ void Creature::AddToWorld()
 
     if (m_countSpawns)
         GetMap()->AddToSpawnCount(GetObjectGuid());
+    
+    sBoostMgr.OnAddToWorld(this);
 }
 
 void Creature::RemoveFromWorld()
